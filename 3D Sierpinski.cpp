@@ -1,6 +1,4 @@
 #include <windows.h>
-
-#include <stdlib.h>
 #include <GL/freeglut.h>
 
 /* initial tetrahedron */
