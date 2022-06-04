@@ -4,8 +4,8 @@
 /* initial tetrahedron */
 
 // tetrahedron vertexes: 0 - z-index; 1: upper; 2: left; 3: right
-GLfloat v[4][3]={{0.0, 0.0, 1.0}, {0.0, 1.0, -1.0},
-                 {-1.0, -1.0, -1.0}, {1.0, -1.0, -1.0}};
+GLfloat v[4][3]={{0.0, 0.0, 1.0}, {0.0, 2.0, -1.0},
+                 {-2.0, -2.0, -1.0}, {2.0, -2.0, -1.0}};
 
 // colors
 GLfloat colors[4][3] = {{0.0, 0.9, 0.2}, {1.0, 0.5, 0.2},
@@ -88,7 +88,7 @@ void myReshape(int w, int h)
 int main(int argc, char **argv)
 {
     // number of subdivision steps
-    n = 1;
+    n = 4;
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
