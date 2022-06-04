@@ -3,20 +3,25 @@
 
 /* initial tetrahedron */
 
-GLfloat v[4][3]={{0.0, 0.0, 3.0}, {0.0, 2.0, -1.0},
-                 {-2.0, -2.0, -2.0}, {2.0, -2.0, -2.0}};
+// tetrahedron vertexes: 0 - z-index; 1: upper; 2: left; 3: right
+GLfloat v[4][3]={{0.0, 0.0, 1.0}, {0.0, 1.0, -1.0},
+                 {-1.0, -1.0, -1.0}, {1.0, -1.0, -1.0}};
 
-GLfloat colors[4][3] = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0},
-                        {0.0, 0.0, 1.0}, {0.0, 0.0, 0.0}};
+// colors
+GLfloat colors[4][3] = {{0.0, 0.9, 0.2}, {1.0, 0.5, 0.2},
+                        {0.0, 0.5, 0.3}, {0.0, 0.3, 0.9}};
 
 int n;
 
+
+// draw the triangle
 void triangle(GLfloat *va, GLfloat *vb, GLfloat *vc) {
     glVertex3fv(va);
     glVertex3fv(vb);
     glVertex3fv(vc);
 }
 
+// create the tetrahedron and color it
 void tetra(GLfloat *a, GLfloat *b, GLfloat *c, GLfloat *d) {
     glColor3fv(colors[0]);
     triangle(a, b, c);
@@ -28,11 +33,12 @@ void tetra(GLfloat *a, GLfloat *b, GLfloat *c, GLfloat *d) {
     triangle(b, d, c);
 }
 
+// dividing the tetrahedron
 void divide_tetra(GLfloat *a, GLfloat *b, GLfloat *c, GLfloat *d, int m) {
     GLfloat mid[6][3];
     if(m>0) {
-        /* compute six midpoints */
 
+        // compute six midpoints
         for (int j = 0; j < 3; j++) {
             mid[0][j]=(a[j]+b[j])/2;
             mid[1][j]=(a[j]+c[j])/2;
@@ -42,15 +48,14 @@ void divide_tetra(GLfloat *a, GLfloat *b, GLfloat *c, GLfloat *d, int m) {
             mid[5][j]=(b[j]+d[j])/2;
         }
 
-        /* create 4 tetrahedrons by subdivision */
-
+        // create 4 tetrahedrons by subdivision
         divide_tetra(a, mid[0], mid[1], mid[2], m-1);
         divide_tetra(mid[0], b, mid[3], mid[5], m-1);
         divide_tetra(mid[1], mid[3], c, mid[4], m-1);
         divide_tetra(mid[2], mid[4], d, mid[5], m-1);
     }
     else
-        tetra(a,b,c,d); /* draw tetrahedron at end of recursion */
+        tetra(a,b,c,d); // draw tetrahedron at end of recursion
 }
 
 
@@ -82,12 +87,12 @@ void myReshape(int w, int h)
 
 int main(int argc, char **argv)
 {
-    //n=atoi(argv[1]); /* or enter number of subdivision steps here */
-    n = 10;
+    // number of subdivision steps
+    n = 1;
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
-    glutCreateWindow("3D Gasket");
+    glutCreateWindow("3D Sierpinkski");
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
     glEnable(GL_DEPTH_TEST);
