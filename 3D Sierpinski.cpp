@@ -129,7 +129,7 @@ void myReshape(int w, int h)
 void init() {
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(myIdentityMatrix);
-    glOrtho(-5, 5, -5, 5, -7, 7);
+    glOrtho(-2, 2, -2, 2, -3, 3);
 }
 
 void function(){
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
     glutCreateWindow("3D Sierpinkski");
-    //init();
+    init();
     glutReshapeFunc(myReshape);
     glutIdleFunc(function);
     glutDisplayFunc(display);
