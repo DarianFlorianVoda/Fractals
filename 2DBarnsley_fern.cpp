@@ -10,7 +10,7 @@
 
 // Numbers of points that should be calculated before redrawing.
 // Redrawing is slow, so higher number --> faster rendering
-#define POINTS_PER_DRAW 100
+#define POINTS_PER_DRAW 10
 
 // define the domain/range of the coordinates that will be represented in window
 #define X_MIN (-5)

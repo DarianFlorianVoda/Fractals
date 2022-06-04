@@ -1,18 +1,42 @@
 #include <windows.h>
 #include <GL/freeglut.h>
-
+#include <cmath>
 /* initial tetrahedron */
 
 // tetrahedron vertexes: 0 - z-index; 1: upper; 2: left; 3: right
 GLfloat v[4][3]={{0.0, 0.0, 1.0}, {0.0, 2.0, -1.0},
-                 {-2.0, -2.0, -1.0}, {2.0, -2.0, -1.0}};
+                 {-1.0, -1.0, -1.0}, {1.0, -1.0, -1.0}};
 
 // colors
-GLfloat colors[4][3] = {{0.0, 0.9, 0.2}, {1.0, 0.5, 0.2},
-                        {0.0, 0.5, 0.3}, {0.0, 0.3, 0.9}};
+GLfloat colors[4][3] = {{0.0, 0.9, 0.2}, {0.0, 0.5, 0.2},
+                        {0.0, 0.5, 0.3}, {0.0, 0.9, 0.4}};
 
+GLfloat myIdentityMatrix[16] = {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+};
+
+GLfloat myTranslationMatrix[16] = {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        1.0, 1.0, 5.0, 1.0
+};
+GLfloat angle = 0;
+GLfloat angle2 = 0;
 int n;
 
+
+const GLfloat *my_rotation_matrix() {
+    return new GLfloat[16]{
+            cosf(angle * 0.02f), 0, sinf(angle * 0.02f), 0.0,
+            0.0, 1.0, 0.0, 0.0,
+            -sinf(angle * 0.02f), cosf(angle * 0.02f), 1.0, 0.0,
+            0.0, 0.0, 0.0, 1.0
+    };
+}
 
 // draw the triangle
 void triangle(GLfloat *va, GLfloat *vb, GLfloat *vc) {
@@ -62,10 +86,28 @@ void divide_tetra(GLfloat *a, GLfloat *b, GLfloat *c, GLfloat *d, int m) {
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //right square
+    glPushMatrix();
+//    glMultMatrixf(myTranslationMatrix);
+    glMultMatrixf(my_rotation_matrix());
     glBegin(GL_TRIANGLES);
     divide_tetra(v[0], v[1], v[2], v[3], n);
     glEnd();
+    glPopMatrix();
     glFlush();
+}
+
+void handle_keyboard(unsigned char key, int x, int y) {
+    switch (key) {
+        case 'r' :
+            angle += 5;
+            break;
+        case 't' :
+            angle2 += 5;
+            break;
+        case 'q' :
+            exit(EXIT_SUCCESS);
+    }
 }
 
 
@@ -84,6 +126,16 @@ void myReshape(int w, int h)
     glutPostRedisplay();
 }
 
+void init() {
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(myIdentityMatrix);
+    glOrtho(-5, 5, -5, 5, -7, 7);
+}
+
+void function(){
+    glutPostRedisplay();
+}
+
 
 int main(int argc, char **argv)
 {
@@ -93,8 +145,11 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
     glutCreateWindow("3D Sierpinkski");
+    //init();
     glutReshapeFunc(myReshape);
+    glutIdleFunc(function);
     glutDisplayFunc(display);
+    glutKeyboardFunc(handle_keyboard);
     glEnable(GL_DEPTH_TEST);
     glClearColor (1.0, 1.0, 1.0, 1.0);
     glutMainLoop();
